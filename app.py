@@ -181,7 +181,8 @@ if uploaded_files:
         col3.metric("❌ أخطاء", stats["errors"])
         col4.metric("⏱️ الوقت", f"{execution_time}s")
 
-        st.progress(success_rate / 100)
+        progress_value = min(max(success_rate / 100, 0.0), 1.0)
+        st.progress(progress_value)
         st.caption(f"نسبة النجاح: {success_rate}%")
 
         st.divider()
