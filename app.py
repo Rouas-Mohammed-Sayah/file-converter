@@ -3,9 +3,114 @@ import pandas as pd
 import sqlite3
 import os
 import re
-import json
 import time
-import datetime
+
+# =========================================================
+# 🎨 إعدادات الصفحة
+# =========================================================
+
+st.set_page_config(
+    page_title="محوّل الملفات",
+    page_icon="🔄",
+    layout="wide"
+)
+
+# =========================================================
+# 🎨 CSS مخصص
+# =========================================================
+
+st.markdown("""
+<style>
+    /* الخلفية العامة */
+    .stApp {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* البطاقات */
+    .card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        margin: 10px 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    /* العنوان الرئيسي */
+    .main-title {
+        text-align: center;
+        color: white;
+        font-size: 3em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* العنوان الفرعي */
+    .sub-title {
+        text-align: center;
+        color: rgba(255,255,255,0.9);
+        font-size: 1.2em;
+        margin-bottom: 30px;
+    }
+
+    /* بطاقات الإحصاءات */
+    .metric-card {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        color: white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .metric-value {
+        font-size: 2.5em;
+        font-weight: bold;
+    }
+
+    .metric-label {
+        font-size: 0.9em;
+        opacity: 0.9;
+        margin-top: 5px;
+    }
+
+    /* زر الرفع */
+    .uploadedFile {
+        border-radius: 15px !important;
+    }
+
+    /* زر البدء */
+    .stButton > button {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 25px !important;
+        padding: 15px 40px !important;
+        font-size: 1.1em !important;
+        font-weight: bold !important;
+        width: 100% !important;
+        box-shadow: 0 5px 15px rgba(102,126,234,0.4) !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 20px rgba(102,126,234,0.6) !important;
+    }
+
+    /* شريط التقدم */
+    .stProgress > div > div {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        border-radius: 10px !important;
+    }
+
+    /* إخفاء عناصر Streamlit الافتراضية */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+</style>
+""", unsafe_allow_html=True)
+
 
 # =========================================================
 # 🧠 دوال المعالجة
@@ -40,7 +145,6 @@ def detect_header(df, max_rows=20):
 
 
 def process_files(uploaded_files):
-
     db_path = "database.db"
     details = []
     stats = {
@@ -54,13 +158,11 @@ def process_files(uploaded_files):
     start_time = time.time()
 
     with sqlite3.connect(db_path) as conn:
-
         for uploaded_file in uploaded_files:
             stats["total_files"] += 1
             file_name = uploaded_file.name
 
             try:
-                # ======= CSV =======
                 if file_name.lower().endswith(".csv"):
                     try:
                         df = pd.read_csv(uploaded_file, encoding="utf-8", low_memory=False)
@@ -88,7 +190,6 @@ def process_files(uploaded_files):
                         "df": df
                     })
 
-                # ======= Excel =======
                 elif file_name.lower().endswith((".xlsx", ".xls")):
                     excel_file = pd.ExcelFile(uploaded_file)
                     file_base = os.path.splitext(file_name)[0]
@@ -140,81 +241,101 @@ def process_files(uploaded_files):
 
 
 # =========================================================
-# 🎨 واجهة Streamlit
+# 🎨 الواجهة
 # =========================================================
 
-st.set_page_config(
-    page_title="محوّل الملفات",
-    page_icon="🔄",
-    layout="wide"
-)
+# العنوان الرئيسي
+st.markdown('<p class="main-title">🔄 محوّل الملفات</p>', unsafe_allow_html=True)
+st.markdown('<p class="sub-title">حوّل ملفات Excel و CSV إلى قاعدة بيانات بضغطة واحدة</p>', unsafe_allow_html=True)
 
-st.title("🔄 محوّل Excel و CSV لقاعدة بيانات")
-st.markdown("ارفع ملفاتك وسيتم تحويلها تلقائياً إلى قاعدة بيانات مع تقارير كاملة")
+# منطقة رفع الملفات
+st.markdown('<div class="card">', unsafe_allow_html=True)
 
-st.divider()
-
-# ======= رفع الملفات =======
 uploaded_files = st.file_uploader(
-    "📂 ارفع ملفاتك هنا",
+    "📂 اسحب ملفاتك هنا أو اضغط للاختيار",
     type=["csv", "xlsx", "xls"],
-    accept_multiple_files=True
+    accept_multiple_files=True,
+    help="يدعم ملفات CSV و Excel"
 )
 
 if uploaded_files:
-    st.info(f"📁 تم رفع {len(uploaded_files)} ملف")
+    st.success(f"✅ تم رفع {len(uploaded_files)} ملف بنجاح")
 
-    if st.button("🚀 ابدأ المعالجة", type="primary"):
+st.markdown('</div>', unsafe_allow_html=True)
 
-        with st.spinner("⏳ جاري المعالجة..."):
+# زر المعالجة
+if uploaded_files:
+    if st.button("🚀 ابدأ المعالجة الآن"):
+
+        with st.spinner("⏳ جاري معالجة ملفاتك..."):
             stats, details, execution_time, success_rate, db_path = process_files(uploaded_files)
 
-        st.divider()
-
-        # ======= الإحصاءات =======
-        st.subheader("📊 النتائج")
+        # الإحصاءات
+        st.markdown("---")
+        st.markdown("### 📊 نتائج المعالجة")
 
         col1, col2, col3, col4 = st.columns(4)
 
-        col1.metric("📁 الملفات", stats["total_files"])
-        col2.metric("✅ نجاح", stats["success"])
-        col3.metric("❌ أخطاء", stats["errors"])
-        col4.metric("⏱️ الوقت", f"{execution_time}s")
+        with col1:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{stats["total_files"]}</div>
+                <div class="metric-label">📁 الملفات</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col2:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{stats["success"]}</div>
+                <div class="metric-label">✅ نجاح</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col3:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{stats["errors"]}</div>
+                <div class="metric-label">❌ أخطاء</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        with col4:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-value">{execution_time}s</div>
+                <div class="metric-label">⏱️ الوقت</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
 
         progress_value = min(max(success_rate / 100, 0.0), 1.0)
         st.progress(progress_value)
-        st.caption(f"نسبة النجاح: {success_rate}%")
+        st.caption(f"✨ نسبة النجاح: {success_rate}%")
 
-        st.divider()
-
-        # ======= تفاصيل كل ملف =======
-        st.subheader("📋 تفاصيل الملفات")
+        # تفاصيل الملفات
+        st.markdown("---")
+        st.markdown("### 📋 تفاصيل الملفات")
 
         for item in details:
-            with st.expander(f"{item['status']} - {item['file']}"):
-
+            with st.expander(f"{item['status']} ← {item['file']}"):
                 if "sheet" in item:
-                    st.write(f"📄 الشيت: {item['sheet']}")
-
+                    st.write(f"📄 الشيت: **{item['sheet']}**")
                 if "rows" in item:
-                    st.write(f"📝 عدد الصفوف: {item['rows']}")
-
+                    st.write(f"📝 عدد الصفوف: **{item['rows']}**")
                 if "table" in item:
-                    st.write(f"🗄️ اسم الجدول: {item['table']}")
-
+                    st.write(f"🗄️ اسم الجدول: **{item['table']}**")
                 if "reason" in item:
                     st.warning(f"السبب: {item['reason']}")
-
                 if "message" in item:
                     st.error(f"الخطأ: {item['message']}")
-
                 if "df" in item:
-                    st.dataframe(item["df"].head(10))
+                    st.dataframe(item["df"].head(10), use_container_width=True)
 
-        st.divider()
-
-        # ======= تحميل قاعدة البيانات =======
-        st.subheader("💾 تحميل النتائج")
+        # تحميل قاعدة البيانات
+        st.markdown("---")
+        st.markdown("### 💾 تحميل النتائج")
 
         with open(db_path, "rb") as f:
             st.download_button(
@@ -225,4 +346,6 @@ if uploaded_files:
             )
 
 else:
-    st.warning("👆 ارفع ملف CSV أو Excel للبدء")
+    st.markdown('<div class="card">', unsafe_allow_html=True)
+    st.info("👆 ارفع ملف CSV أو Excel للبدء")
+    st.markdown('</div>', unsafe_allow_html=True)
