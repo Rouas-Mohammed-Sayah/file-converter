@@ -192,20 +192,21 @@ st.markdown(f"""
 # =========================================================
 # 🌍 شريط تغيير اللغة
 # =========================================================
+col1, col2 = st.columns([8, 2])
 
-# استبدل قسم شريط اللغة كاملاً بهذا
-
-col1, col2, col3 = st.columns([6, 1, 1])
-
-with col3:
+with col2:
     lang_choice = st.selectbox(
         "",
-        options=["🇸🇦 AR", "🇫🇷 FR", "🇬🇧 EN"],
+        options=["العربية", "Français", "English"],
         index=["ar", "fr", "en"].index(st.session_state.lang),
         label_visibility="collapsed"
     )
 
-    lang_map = {"🇸🇦 AR": "ar", "🇫🇷 FR": "fr", "🇬🇧 EN": "en"}
+    lang_map = {
+        "العربية": "ar",
+        "Français": "fr",
+        "English": "en"
+    }
 
     if lang_map[lang_choice] != st.session_state.lang:
         st.session_state.lang = lang_map[lang_choice]
