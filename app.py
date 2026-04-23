@@ -23,84 +23,80 @@ st.markdown("""
 <style>
     /* الخلفية العامة */
     .stApp {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-
-    /* البطاقات */
-    .card {
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        margin: 10px 0;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        background-color: #f8f9fa;
     }
 
     /* العنوان الرئيسي */
     .main-title {
         text-align: center;
-        color: white;
-        font-size: 3em;
+        color: #1a1a2e;
+        font-size: 2.5em;
         font-weight: bold;
-        margin-bottom: 10px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        margin-bottom: 5px;
     }
 
     /* العنوان الفرعي */
     .sub-title {
         text-align: center;
-        color: rgba(255,255,255,0.9);
-        font-size: 1.2em;
+        color: #6c757d;
+        font-size: 1.1em;
         margin-bottom: 30px;
+    }
+
+    /* البطاقات */
+    .card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        margin: 10px 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        border: 1px solid #e9ecef;
     }
 
     /* بطاقات الإحصاءات */
     .metric-card {
-        background: linear-gradient(135deg, #667eea, #764ba2);
-        border-radius: 15px;
+        background: white;
+        border-radius: 16px;
         padding: 20px;
         text-align: center;
-        color: white;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        color: #1a1a2e;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        border: 1px solid #e9ecef;
     }
 
     .metric-value {
         font-size: 2.5em;
         font-weight: bold;
+        color: #1a1a2e;
     }
 
     .metric-label {
         font-size: 0.9em;
-        opacity: 0.9;
+        color: #6c757d;
         margin-top: 5px;
-    }
-
-    /* زر الرفع */
-    .uploadedFile {
-        border-radius: 15px !important;
     }
 
     /* زر البدء */
     .stButton > button {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        background: #1a1a2e !important;
         color: white !important;
         border: none !important;
-        border-radius: 25px !important;
+        border-radius: 12px !important;
         padding: 15px 40px !important;
         font-size: 1.1em !important;
         font-weight: bold !important;
         width: 100% !important;
-        box-shadow: 0 5px 15px rgba(102,126,234,0.4) !important;
         transition: all 0.3s ease !important;
     }
 
     .stButton > button:hover {
+        background: #2d2d4e !important;
         transform: translateY(-2px) !important;
-        box-shadow: 0 8px 20px rgba(102,126,234,0.6) !important;
     }
 
     /* شريط التقدم */
     .stProgress > div > div {
-        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        background: #1a1a2e !important;
         border-radius: 10px !important;
     }
 
@@ -110,8 +106,6 @@ st.markdown("""
     header {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
-
-
 # =========================================================
 # 🧠 دوال المعالجة
 # =========================================================
