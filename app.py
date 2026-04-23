@@ -106,43 +106,33 @@ st.set_page_config(
 # =========================================================
 # 🎨 CSS
 # =========================================================
-
 st.markdown(f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Inter:wght@400;700&display=swap');
 
-    * {{
-        font-family: '{t["font"]}', sans-serif !important;
-        font-size: 17px !important;
-    }}
-
+    /* فقط العناصر التي نحددها */
     .stApp {{
         background-color: #f8f9fa;
         direction: {t["direction"]};
+        font-family: '{t["font"]}', sans-serif;
+        font-size: 17px;
     }}
 
     .main-title {{
         text-align: center;
         color: #1a1a2e;
-        font-size: 2.5em !important;
+        font-size: 2.2em;
         font-weight: bold;
         margin-bottom: 5px;
+        font-family: '{t["font"]}', sans-serif;
     }}
 
     .sub-title {{
         text-align: center;
         color: #6c757d;
-        font-size: 1.1em !important;
+        font-size: 1.1em;
         margin-bottom: 30px;
-    }}
-
-    .card {{
-        background: white;
-        border-radius: 16px;
-        padding: 30px;
-        margin: 10px 0;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-        border: 1px solid #e9ecef;
+        font-family: '{t["font"]}', sans-serif;
     }}
 
     .metric-card {{
@@ -153,37 +143,32 @@ st.markdown(f"""
         color: #1a1a2e;
         box-shadow: 0 2px 10px rgba(0,0,0,0.06);
         border: 1px solid #e9ecef;
+        font-family: '{t["font"]}', sans-serif;
     }}
 
     .metric-value {{
-        font-size: 2.5em !important;
+        font-size: 2.2em;
         font-weight: bold;
         color: #1a1a2e;
     }}
 
     .metric-label {{
-        font-size: 1em !important;
+        font-size: 1em;
         color: #6c757d;
         margin-top: 5px;
     }}
 
-    /* شريط اللغة */
-    .lang-bar {{
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-bottom: 20px;
-    }}
-
+    /* الأزرار فقط */
     .stButton > button {{
         background: #1a1a2e !important;
         color: white !important;
         border: none !important;
         border-radius: 12px !important;
         padding: 15px 40px !important;
-        font-size: 1.1em !important;
+        font-size: 1em !important;
         font-weight: bold !important;
         width: 100% !important;
+        font-family: '{t["font"]}', sans-serif !important;
         transition: all 0.3s ease !important;
     }}
 
@@ -192,6 +177,7 @@ st.markdown(f"""
         transform: translateY(-2px) !important;
     }}
 
+    /* شريط التقدم */
     .stProgress > div > div {{
         background: #1a1a2e !important;
         border-radius: 10px !important;
@@ -202,7 +188,6 @@ st.markdown(f"""
     header {{visibility: hidden;}}
 </style>
 """, unsafe_allow_html=True)
-
 
 # =========================================================
 # 🌍 شريط تغيير اللغة
